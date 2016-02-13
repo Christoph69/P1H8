@@ -1,17 +1,17 @@
 // Header für einen binären Baum
-#ifndef TREE_H
-#define TREE_H
+#ifndef WORD_TREE_H
+#define WORD_TREE_H
 
 // maximale Wortpuffergroeße
 // const unsigned int WORDPUFFER = 100;
 
 struct Data {
   char        *name;
-  unsigned int anzahl;
+  unsigned int anzahl, erstesVorkommen;
 };
 
 struct Node {
-  Data *data;
+  Data  data;
   Node *left;
   Node *right;
 };
@@ -25,14 +25,18 @@ struct Node {
 ///////////////////////////////////////
 
 // zum initialisieren des Baumes
-void iniTree(Node *wurzel);
+void iniWordlist(Node **wurzel);
 
 // zum einhängen eines neuen Knoten in den Baaum
-bool insertNewNode(Node        *wurzel,
+bool insertNewNode(Node       **wurzel,
                    char        *data,
-                   unsigned int puffer_size);
+                   unsigned int puffer_size,
+                   unsigned int wpos);
 
 // zum ausgeben eines ganzen Baumes
-void outputTree(Node *wurzel);
+void outputWordlist(Node **wurzel);
 
-#endif // ifndef TREE_H
+// zum loeschen bzw. freigeben eines ganzen Baumes
+void deleteWordlist(Node **wurzel);
+
+#endif /* ifndef WORD_TREE_H */
