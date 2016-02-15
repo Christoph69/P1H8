@@ -47,12 +47,17 @@ Textfile selectTextfile(int argc, const char *argv[]) {
     if (!file.datei) {
       perror(argv[1]);
       printf("Weiter mit Eingabe über Konsole!\n");
+    } else {
+      if (std::strlen(argv[1]) < BUFFERSIZE) {
+        std::strncpy(file.dateiname, argv[1], std::strlen(argv[1]) - 4);
+      }
+      else std::strncpy(file.dateiname, argv[1], 92);
     }
   }
 
   if (!file.datei) {
     do {
-      printf("Bitte Name der einzulesenden Textdateieingeben: ");
+      printf("Bitte Name der einzulesenden Textdateieingeben(ohne \".txt\"): ");
       scanf("%s", eingabe);
       zeichen = std::strlen(eingabe);
 
