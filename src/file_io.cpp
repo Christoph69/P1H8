@@ -11,17 +11,17 @@ bool readTextfile(FILE *datei, Node **baum) {
 
   while (((ch = fgetc(datei)) != EOF) && gflag) {
     if (std::isalpha(ch) || (ch == '\'')) {
-      if (ch != '\'') {
+      if ((ch != '\'') && (i < BUFFERSIZE)) {
         buffer[i] = toupper(ch);
         i++;
       }
     }
     else if (buffer[0] != 0) {
       char *name = new char[i + 1];
-      std::strncpy(name, buffer, i);
+      std::strncpy(name, buffer, i + 1);
       gflag = insertNewNode(baum, name, i, wpos);
 
-      for (size_t k = 0; k < i; k++) {
+      for (size_t k = 0; k < i && k < BUFFERSIZE; k++) {
         buffer[k] = { 0 };
       }
       i = 0;
