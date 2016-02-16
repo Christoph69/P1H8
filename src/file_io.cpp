@@ -7,12 +7,15 @@ bool readTextfile(FILE *datei, Node **baum) {
   bool gflag = true;
   int  ch;
   unsigned int i          = 0, wpos = 1;
-  char buffer[BUFFERSIZE] = { 0 };
+  char buffer[BUFFERSIZE] = { 0 }; // eingelesene Zeichen werden zwischen
 
+  // gespeichert
+
+  // Zeichen für Zeichen einlesen und auswerten
   while (((ch = fgetc(datei)) != EOF) && gflag) {
     if (std::isalpha(ch) || (ch == '\'')) {
-      if ((ch != '\'') && (i < BUFFERSIZE)) {
-        buffer[i] = toupper(ch);
+      if ((ch != '\'') && (i < BUFFERSIZE - 1)) {
+        buffer[i] = toupper(ch); // alles zu Grossbuchstaben
         i++;
       }
     }
@@ -22,10 +25,10 @@ bool readTextfile(FILE *datei, Node **baum) {
       gflag = insertNewNode(baum, name, i, wpos);
 
       for (size_t k = 0; k < i && k < BUFFERSIZE; k++) {
-        buffer[k] = { 0 };
+        buffer[k] = { 0 }; // der Puffer wird wieder gelöscht
       }
       i = 0;
-      wpos++;
+      wpos++;              // zaehlt die Wortposition mit
     }
   }
 
@@ -42,20 +45,24 @@ Textfile selectTextfile(int argc, const char *argv[]) {
   int  zeichen             = 0;
 
   if (argc > 1) {
-    file.datei = std::fopen(argv[1], "r");
+    file.datei = std::fopen(argv[1], "r"); // Datei aus argv oeffnen
 
     if (!file.datei) {
       perror(argv[1]);
       printf("Weiter mit Eingabe über Konsole!\n");
-    } else {
+    } else { // Namen für spaeter speichern
       if (std::strlen(argv[1]) < BUFFERSIZE) {
         std::strncpy(file.dateiname, argv[1], std::strlen(argv[1]) - 4);
       }
-      else std::strncpy(file.dateiname, argv[1], 92);
+
+      // nicht nur -5 für '.txt' und \0, sondern auch das vielleicht spaetere
+      // '_wl'. Wenn die Datei mehr Zeichenbesitzt werden einfach am Ende welche
+      // abgeschnitten.
+      else std::strncpy(file.dateiname, argv[1], BUFFERSIZE - 8);
     }
   }
 
-  if (!file.datei) {
+  if (!file.datei) { // Eingabe der .txt ueber Konsole
     do {
       printf("Bitte Name der einzulesenden Textdateieingeben(ohne \".txt\"): ");
       scanf("%s", eingabe);
@@ -64,8 +71,6 @@ Textfile selectTextfile(int argc, const char *argv[]) {
       if (zeichen < (BUFFERSIZE - 4)) {
         std::strcpy(file.dateiname, eingabe);
         std::strcat(eingabe, ".txt");
-
-        // printf("Name der Datei: %s\n", eingabe);
         file.datei = std::fopen(eingabe, "r");
       }
       else printf("Name der Datei ist zu lang!\n");

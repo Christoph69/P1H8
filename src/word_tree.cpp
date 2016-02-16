@@ -17,9 +17,7 @@ bool insertNewNode(Node       **wurzel,
     int cmp = strncmp((*wurzel)->data.name, data, puffer_size + 1);
 
     if (cmp > 0) flag = insertNewNode(&(*wurzel)->left, data, puffer_size, wpos);
-    else if (cmp < 0) flag = insertNewNode(&(*wurzel)->right,
-                                           data,
-                                           puffer_size,
+    else if (cmp < 0) flag = insertNewNode(&(*wurzel)->right, data, puffer_size,
                                            wpos);
     else {
       (*wurzel)->data.anzahl++;
@@ -28,7 +26,8 @@ bool insertNewNode(Node       **wurzel,
     }
   }
 
-  else {
+  else { // Wort ist noch nicht vorgekommen, Speicherplatz muss neu dafür
+         // reserviert werden.
     Node *knoten = new Node;
 
     if (knoten != nullptr) {
@@ -57,6 +56,7 @@ static void outputTree(Node **wurzel) {
   }
 }
 
+// Wrapper
 void outputWordlist(Node **wurzel) {
   printf("\nAusgabe der Wortliste: \n\n");
   printf("%-20s%10s%10s\n", "Name", "First", "Anzahl");
